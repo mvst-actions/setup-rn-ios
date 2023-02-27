@@ -1,0 +1,32 @@
+name: 'Setup React Native for IOS build'
+description: 'Prepares react native project for IOS build'
+inputs:
+  ios-dir:
+    description: 'Path for of ios folder'
+    default: './apps/mobile/ios'
+  main-dir:
+    description: 'Directory containing package.json'
+    default: '.'
+  bundle-command:
+    default: 'mobile:bundle-ios'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install packages
+      run: |
+        yarn install
+      shell: bash
+    - name: Bundle IOS
+      run: |
+        yarn ${{ inputs.bundle-command }}
+      shell: bash
+    - name: Bundle install
+      working-directory: ${{ inputs.ios-dir }}
+      run: |
+        bundle install
+      shell: bash
+    - name: Pod install
+      working-directory: ${{ inputs.ios-dir }}
+      run: |
+        pod install
+      shell: bash
